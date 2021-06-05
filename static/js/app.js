@@ -147,21 +147,28 @@ function buildBubbleChart(numID, ethnicity, gender, age, location, bbtype, wfreq
     let samples = data.samples;
 
     var trace1 = {
-        x: [1, 2, 3, 4],
-        y: [10, 11, 12, 13],
-        mode: 'markers',
+        x: 
+        y: 
+        mode:
         marker: {
-          size: [40, 60, 80, 100]
+          size:
         }
       };
     
-    
+    var traces = [traces1];
+
+    var layout ={
+        title:
+        showlegend:
+        height:
+        width:
+    }
     let bubble = d3.select("#bubble")
 
     // clear/overwrite previous data
     bubble.html("");
 
-    bubble
+    Plotly.newPlot("bubble", traces, layout);
 })};
 
 // load page with default data
