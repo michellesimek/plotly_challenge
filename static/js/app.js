@@ -13,7 +13,7 @@
 // initialize the page with default data
 function init() {
     // read in samples.json
-    d3.json("/data/samples.json").then((data) => {
+    d3.json("data/samples.json").then((data) => {
     // assign variable for names data
     let elements = data.names;
     // loop through each num and append each num to the dropdown menu
@@ -34,7 +34,7 @@ d3.selectAll("#selDataset").on("change", updateMetaData);
 // function to update data depending on selection from dropdown
 function updateMetaData() {
     // read in samples.json
-    d3.json("/data/samples.json").then((data) => {
+    d3.json("data/samples.json").then((data) => {
     
     // create variable for dropdown
     let dropdownMenu = d3.select("#selDataset");
@@ -68,14 +68,14 @@ function updateMetaData() {
 
     // call buildplots function to update
     buildTable(numID, ethnicity, gender, age, location, bbtype, wfreq);
-    buildBarChart(numID, ethnicity, gender, age, location, bbtype, wfreq);
-    buildBubbleChart(numID, ethnicity, gender, age, location, bbtype, wfreq);
+    buildBarChart(numID);
+    buildBubbleChart(numID);
     })
 };
 
 // function to build horizontal bar chart and bubble chart 
-function buildBarChart(numID, ethnicity, gender, age, location, bbtype, wfreq) {
-    d3.json("/data/samples.json").then((data) => {
+function buildBarChart(numID) {
+    d3.json("data/samples.json").then((data) => {
     let samples = data.samples;
     // console.log(samples);
 
@@ -115,13 +115,13 @@ function buildBarChart(numID, ethnicity, gender, age, location, bbtype, wfreq) {
     })
 };
 
-// // function to build horizontal bar chart and bubble chart 
-// function buildplots() {
-//     d3.json("/data/samples.json").then((data) => {
-//     let samples = data.samples;
-//     console.log(samples);
-//     })
-// };
+// // // function to build horizontal bar chart and bubble chart 
+// // function buildplots() {
+// //     d3.json("/data/samples.json").then((data) => {
+// //     let samples = data.samples;
+// //     console.log(samples);
+// //     })
+// // };
 
 // function to update Demographic info table
 function buildTable(numID, ethnicity, gender, age, location, bbtype, wfreq) {
@@ -142,27 +142,35 @@ function buildTable(numID, ethnicity, gender, age, location, bbtype, wfreq) {
         .append("tr").text(`WFREQ: ${wfreq}`);
     };
 
-function buildBubbleChart(numID, ethnicity, gender, age, location, bbtype, wfreq) {
-    d3.json("/data/samples.json").then((data) => {
+function buildBubbleChart(numID) {
+    d3.json("data/samples.json").then((data) => {
     let samples = data.samples;
+    // console.log(samples);
+
+    // filter data
+    let filteredSample = samples.filter(sample => sample.id == numID);
+    // console.log(filteredSample);
+    console.log(filteredSample);
 
     var trace1 = {
-        x: 
-        y: 
-        mode:
-        marker: {
-          size:
+        x: filteredSample.map(data => data.otu_ids),
+        y: filteredSample.map(data => data.sample_values),
+        text: filteredSample.map(data => data.otu_labels),
+        mode: "markers",
+        marker: { color: filteredSample.map(data => data.otu_ids),
+          size: filteredSample.map(data => data.sample_values)
         }
       };
     
-    var traces = [traces1];
+    var traces = [trace1];
 
     var layout ={
-        title:
-        showlegend:
-        height:
-        width:
-    }
+        title: "Bacteria Cultures Per Sample",
+        showlegend: true,
+        height: 1200,
+        width: 1200
+    };
+
     let bubble = d3.select("#bubble")
 
     // clear/overwrite previous data
