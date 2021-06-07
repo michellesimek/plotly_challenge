@@ -86,11 +86,14 @@ function buildBarChart(numID) {
     let slicedData = filteredSample.slice(0,10);
     console.log(slicedData);
 
+    let results = slicedData[0]
+    console.log(results);
+
     // Trace1 for ID data
     let trace1 = {
-        x: slicedData.map(data => data.sample_values),
-        y: slicedData.map(data => data.otu_ids),
-        // text: slicedData.map(data => data.out_labels),
+        x: results.sample_values,
+        y: `"OTU: ${results.otu_ids}`,
+        text: results.otu_labels,
         name: "OTU",
         // chart type
         type: "bar",
@@ -114,14 +117,6 @@ function buildBarChart(numID) {
 
     })
 };
-
-// // // function to build horizontal bar chart and bubble chart 
-// // function buildplots() {
-// //     d3.json("/data/samples.json").then((data) => {
-// //     let samples = data.samples;
-// //     console.log(samples);
-// //     })
-// // };
 
 // function to update Demographic info table
 function buildTable(numID, ethnicity, gender, age, location, bbtype, wfreq) {
@@ -152,13 +147,16 @@ function buildBubbleChart(numID) {
     // console.log(filteredSample);
     console.log(filteredSample);
 
+    let results = filteredSample[0]
+    console.log(results);
+
     var trace1 = {
-        x: filteredSample.map(data => data.otu_ids),
-        y: filteredSample.map(data => data.sample_values),
-        text: filteredSample.map(data => data.otu_labels),
+        x: results.otu_ids,
+        y: results.sample_values,
+        text: results.otu_labels,
         mode: "markers",
-        marker: { color: filteredSample.map(data => data.otu_ids),
-          size: filteredSample.map(data => data.sample_values)
+        marker: { color: results.otu_ids,
+          size: results.sample_values
         }
       };
     
@@ -166,15 +164,15 @@ function buildBubbleChart(numID) {
 
     var layout ={
         title: "Bacteria Cultures Per Sample",
-        showlegend: true,
-        height: 1200,
+        showlegend: false,
+        height: 600,
         width: 1200
     };
 
     let bubble = d3.select("#bubble")
 
     // clear/overwrite previous data
-    bubble.html("");
+    // bubble.html("");
 
     Plotly.newPlot("bubble", traces, layout);
 })};
